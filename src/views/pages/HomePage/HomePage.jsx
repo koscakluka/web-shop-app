@@ -1,8 +1,9 @@
 import React from "react";
-import ProductsGrid from "../../components/ProductsGrid/ProductsGallery";
-import StandardLayout from "../layouts/StandardLayout";
+import ProductsGrid from "../../../components/ProductsGrid/ProductsGallery";
+import StandardLayout from "../../layouts/StandardLayout";
 
-import { Title, Subtitle, BuyButton } from "./HomePage.style";
+import { Title, Subtitle } from "../../layouts/StandardLayout.style";
+import { BuyButton } from "./HomePage.style";
 
 const HomePage = () => {
   return (
