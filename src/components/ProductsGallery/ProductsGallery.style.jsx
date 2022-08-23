@@ -14,6 +14,15 @@ const ProductCard = styled(Box)(({ theme }) => ({
   gridTemplateAreas: "'image image' 'title checkbox'",
   alignItems: "center",
   justifyItems: "center",
+
+  padding: "5px",
+
+  cursor: "pointer",
+
+  "&:hover": {
+    boxShadow: "1px 1px 3px #BBB",
+    borderRadius: "6px",
+  },
 }));
 
 const ProductImage = styled("img")(({ theme }) => ({

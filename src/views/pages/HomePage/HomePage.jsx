@@ -1,7 +1,7 @@
 import React from "react";
 import useCheckoutPageModal from "../../../hooks/useCheckoutPageModal";
 
-import ProductsGrid from "../../../components/ProductsGrid/ProductsGallery";
+import ProductsGallery from "../../../components/ProductsGallery/ProductsGallery";
 import StandardLayout from "../../layouts/StandardLayout";
 
 import { Title, Subtitle } from "../../layouts/StandardLayout.style";
@@ -28,7 +28,7 @@ const HomePage = () => {
       <Subtitle variant="subtitle1" gutterBottom>
         Keep up with our pick of the best gadgets and tech out right now.
       </Subtitle>
-      <ProductsGrid />
+      <ProductsGallery />
       <BuyButton variant="contained" size="large" onClick={handleClickOpen}>
         Buy
       </BuyButton>
