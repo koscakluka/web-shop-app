@@ -18,9 +18,7 @@ const ThankYouPage = () => {
       </Subtitle>
       <Box sx={{ textAlign: "center" }}>
         <Link to="/">
-          <BackButton variant="contained" size="large">
-            Back
-          </BackButton>
+          <BackButton variant="contained">Back</BackButton>
         </Link>
       </Box>
     </StandardLayout>
