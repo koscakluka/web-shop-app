@@ -10,10 +10,10 @@ import {
 
 const ProductsGallery = () => (
   <ProductsGrid container spacing={8}>
-    {[1, 2, 3, 4, 5, 6, 7].map(() => (
-      <ProductsGrid>
+    {[1, 2, 3, 4, 5, 6, 7].map((k) => (
+      <ProductsGrid key={k}>
         <ProductCard>
-          <ProductImage />
+          <ProductImage src="https://picsum.photos/600/400" />
           <ProductTitle>Product Name: Product Price</ProductTitle>
           <ProductCheckbox />
         </ProductCard>

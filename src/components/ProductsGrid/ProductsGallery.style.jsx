@@ -8,26 +8,29 @@ const ProductsGrid = styled(Grid2)(({ theme }) => ({
 const ProductCard = styled(Box)(({ theme }) => ({
   maxWidth: "420px",
 
-  //TODO: Small bug with centering below 420px
-  //Possible solution flex or width manipulation
   display: "grid",
-  gridTemplateColumns: "1fr 1rem",
-  gridTemplateRows: "1fr 30px",
+  gridTemplateColumns: "1fr auto",
+  gridTemplateRows: "1fr auto",
   gridTemplateAreas: "'image image' 'title checkbox'",
   alignItems: "center",
+  justifyItems: "center",
 }));
 
 const ProductImage = styled("img")(({ theme }) => ({
   gridArea: "image",
 
-  width: "420px",
-  height: "224px",
+  width: "100%",
+  maxWidth: "420px",
+  maxHeight: "224px",
+  objectFit: "contain",
 
   borderRadius: "6px",
 }));
 
 const ProductTitle = styled(Typography)(({ theme }) => ({
   gridArea: "title",
+
+  minHeight: "1.5rem",
 
   fontFamily: "Roboto",
   fontStyle: "normal",
