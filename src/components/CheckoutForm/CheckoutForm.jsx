@@ -10,7 +10,12 @@ import {
 import CheckoutFormHeader from "./CheckoutFormHeader";
 import { HeaderTypography } from "./CheckoutForm.style";
 
-const CheckoutForm = ({ formFields, page }) => (
+const CheckoutForm = ({
+  formFields,
+  formValues,
+  page,
+  elementsRegistration,
+}) => (
   <form>
     <CheckoutFormHeader page={page} />
     <HeaderTypography variant="h6" component="h2">
@@ -27,6 +32,10 @@ const CheckoutForm = ({ formFields, page }) => (
                 label={key}
                 fullWidth
                 required={value.required}
+                defaultValue={formValues[key]}
+                inputRef={(el) => {
+                  elementsRegistration(key, el);
+                }}
               />
             </Grid>
           );
@@ -34,7 +43,18 @@ const CheckoutForm = ({ formFields, page }) => (
           return (
             <Grid item xs={12} sm={value.split ? 6 : 12} key={key}>
               <FormControlLabel
-                control={<Checkbox defaultChecked={value.checked} />}
+                control={
+                  <Checkbox
+                    defaultChecked={
+                      formValues[key] !== undefined
+                        ? formValues[key]
+                        : value.checked
+                    }
+                    inputRef={(el) => {
+                      elementsRegistration(key, el);
+                    }}
+                  />
+                }
                 label={key}
               />
             </Grid>

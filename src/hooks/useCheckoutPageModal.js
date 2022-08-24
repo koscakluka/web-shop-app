@@ -6,13 +6,31 @@ import {
 } from "../components/CheckoutForm/CheckoutForm";
 
 import {
-  CheckoutFormP3,
-  CheckoutFormP3Actions,
-} from "../components/CheckoutForm/CheckoutFormP3";
+  CheckoutFormReview,
+  CheckoutFormReviewActions,
+} from "../components/CheckoutForm/CheckoutFormReview";
 
 const useCheckoutPageModal = (getCart) => {
   const [checkoutPage, setCheckoutPage] = React.useState(1);
+  const [formValues, setFormValues] = React.useState({});
   const [open, setOpen] = React.useState(false);
+
+  let formElements = React.useRef({});
+  const addElementToRef = (key, el) => {
+    formElements.current[key] = el;
+  };
+
+  const updateFormValues = () => {
+    const newFormValues = Object.entries(formElements.current)
+      .filter(([key, value]) => value)
+      .map(([key, value]) => [
+        key,
+        value.type === "checkbox" ? value.checked : value.value,
+      ]);
+    setFormValues((formValues) =>
+      Object.assign({}, formValues, Object.fromEntries(newFormValues))
+    );
+  };
 
   const navigate = useNavigate();
 
@@ -40,16 +58,27 @@ const useCheckoutPageModal = (getCart) => {
     switch (page) {
       case 2:
         return [
-          <CheckoutForm formFields={PAGE2_FIELDS} page={2} />,
+          <CheckoutForm
+            formFields={PAGE2_FIELDS}
+            formValues={formValues}
+            page={2}
+            elementsRegistration={addElementToRef}
+          />,
           <CheckoutFormActions
-            nextPage={nextPage}
-            previousPage={previousPage}
+            nextPage={() => {
+              updateFormValues();
+              nextPage();
+            }}
+            previousPage={() => {
+              updateFormValues();
+              previousPage();
+            }}
           />,
         ];
       case 3:
         return [
-          <CheckoutFormP3 />,
-          <CheckoutFormP3Actions
+          <CheckoutFormReview formValues={formValues} />,
+          <CheckoutFormReviewActions
             submitForm={submitForm}
             previousPage={previousPage}
           />,
@@ -57,8 +86,18 @@ const useCheckoutPageModal = (getCart) => {
       case 1:
       default:
         return [
-          <CheckoutForm formFields={PAGE1_FIELDS} page={1} />,
-          <CheckoutFormActions nextPage={nextPage} />,
+          <CheckoutForm
+            formFields={PAGE1_FIELDS}
+            formValues={formValues}
+            page={1}
+            elementsRegistration={addElementToRef}
+          />,
+          <CheckoutFormActions
+            nextPage={() => {
+              updateFormValues();
+              nextPage();
+            }}
+          />,
         ];
     }
   };
@@ -102,7 +141,7 @@ const PAGE1_FIELDS = {
     required: true,
   },
   Country: {
-    type: "number",
+    type: "text",
     split: true,
     required: true,
   },

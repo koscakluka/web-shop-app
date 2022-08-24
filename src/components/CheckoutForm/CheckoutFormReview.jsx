@@ -8,7 +8,7 @@ import {
   SubheaderTypography,
 } from "./CheckoutForm.style";
 
-const CheckoutFormP3 = () => (
+const CheckoutFormReview = ({ cart, formValues }) => (
   <>
     <CheckoutFormHeader page={3} />
     <Grid container>
@@ -50,8 +50,14 @@ const CheckoutFormP3 = () => (
         <SubheaderTypography variant="h6" component={"h3"} mb={"0.5rem"}>
           Shipping
         </SubheaderTypography>
-        <Typography mb={"0.2rem"}>Name Surname</Typography>
-        <Typography>Address</Typography>
+        <Typography mb={"0.2rem"}>
+          {formValues["First Name"]} {formValues["Last Name"]}
+        </Typography>
+        <Typography>
+          {formValues["Address Line 1"]}, {formValues["City"]},{" "}
+          {formValues["State/Province/Region"]},{" "}
+          {formValues["Zip / Postal code"]}, {formValues["Country"]}
+        </Typography>
       </Grid>
       {/*******************/}
       {/* Payment Details */}
@@ -74,7 +80,7 @@ const CheckoutFormP3 = () => (
             <Typography>Card holder:</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography>Name Surname</Typography>
+            <Typography>{formValues["Name on card"]}</Typography>
           </Grid>
         </Grid>
         <Grid container mb={"0.2rem"} spacing={0.5}>
@@ -82,7 +88,7 @@ const CheckoutFormP3 = () => (
             <Typography>Card number:</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography>XXXX-XXXX-XXXX-1234</Typography>
+            <Typography>{formValues["Card number"]}</Typography>
           </Grid>
         </Grid>
         <Grid container mb={"0.2rem"} spacing={0.5}>
@@ -90,7 +96,7 @@ const CheckoutFormP3 = () => (
             <Typography>Expiry Date:</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography>MM/YYYY</Typography>
+            <Typography>{formValues["Expiry date"]}</Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -98,7 +104,7 @@ const CheckoutFormP3 = () => (
   </>
 );
 
-const CheckoutFormP3Actions = ({ submitForm, previousPage }) => (
+const CheckoutFormReviewActions = ({ submitForm, previousPage }) => (
   <>
     <Button onClick={previousPage}>Back</Button>
     <Button onClick={submitForm} variant="contained">
@@ -107,4 +113,4 @@ const CheckoutFormP3Actions = ({ submitForm, previousPage }) => (
   </>
 );
 
-export { CheckoutFormP3, CheckoutFormP3Actions };
+export { CheckoutFormReview, CheckoutFormReviewActions };
