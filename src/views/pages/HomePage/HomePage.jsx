@@ -16,16 +16,29 @@ import {
 import ProductsService from "../../../services/products/ProductsService";
 import { useQuery } from "react-query";
 import CircularLoading from "../../../components/Loading/CircularLoading";
+import useCart from "../../../hooks/useCart";
 
 const HomePage = () => {
+  const [selectedProducts, setSelectedProducts] = React.useState([]);
   const { data: products, isLoading: isLoadingProducts } = useQuery(
     ["products", "all"],
     () => ProductsService.getAllProducts()
   );
+  const [getCart, toggleProductInCart] = useCart();
   const [open, handleClickOpen, handleClose, checkoutPage, getPage] =
-    useCheckoutPageModal();
+    useCheckoutPageModal(getCart);
 
-  const [checkoutContent, checkoutActions] = getPage(checkoutPage);
+  // HOTFIX for re-rendering child
+  // TODO Find a cleaner way to re-render gallery
+  const toggleSelectedProduct = (productId) => {
+    toggleProductInCart(productId);
+    setSelectedProducts(getCart());
+  };
+
+  const [checkoutContent, checkoutActions] = React.useMemo(
+    () => getPage(checkoutPage),
+    [checkoutPage]
+  );
 
   return (
     <StandardLayout>
@@ -38,7 +51,11 @@ const HomePage = () => {
       {isLoadingProducts ? (
         <CircularLoading />
       ) : products.length > 0 ? (
-        <ProductsGallery products={products} />
+        <ProductsGallery
+          products={products}
+          selectHandler={toggleSelectedProduct}
+          selectedProducts={getCart()}
+        />
       ) : (
         <Typography textAlign={"center"}>No products found...</Typography>
       )}

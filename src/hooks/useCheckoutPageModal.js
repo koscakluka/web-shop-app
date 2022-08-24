@@ -9,7 +9,7 @@ import {
   CheckoutFormP3Actions,
 } from "../components/CheckoutForm/CheckoutForm";
 
-const useCheckoutPageModal = () => {
+const useCheckoutPageModal = (getCart) => {
   const [checkoutPage, setCheckoutPage] = React.useState(1);
   const [open, setOpen] = React.useState(false);
 
