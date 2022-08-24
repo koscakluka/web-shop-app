@@ -1,7 +1,8 @@
-import { Box, Checkbox, styled, Typography } from "@mui/material";
+import { Box, Checkbox, Grid, styled, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-const ProductsGrid = styled(Grid2)(({ theme }) => ({
+// const ProductsGrid = styled(Grid2)(({ theme }) => ({ // For proper flex flow
+const ProductsGrid = styled(Grid)(({ theme }) => ({
   justifyContent: "center",
 }));
 

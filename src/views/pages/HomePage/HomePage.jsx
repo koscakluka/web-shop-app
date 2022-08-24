@@ -13,8 +13,15 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
+import ProductsService from "../../../services/products/ProductsService";
+import { useQuery } from "react-query";
+import CircularLoading from "../../../components/Loading/CircularLoading";
 
 const HomePage = () => {
+  const { data: products, isLoading: isLoadingProducts } = useQuery(
+    ["products", "all"],
+    () => ProductsService.getAllProducts()
+  );
   const [open, handleClickOpen, handleClose, checkoutPage, getPage] =
     useCheckoutPageModal();
 
@@ -28,7 +35,13 @@ const HomePage = () => {
       <Subtitle variant="subtitle1" gutterBottom>
         Keep up with our pick of the best gadgets and tech out right now.
       </Subtitle>
-      <ProductsGallery />
+      {isLoadingProducts ? (
+        <CircularLoading />
+      ) : products.length > 0 ? (
+        <ProductsGallery products={products} />
+      ) : (
+        <Typography textAlign={"center"}>No products found...</Typography>
+      )}
       <BuyButton variant="contained" size="large" onClick={handleClickOpen}>
         Buy
       </BuyButton>

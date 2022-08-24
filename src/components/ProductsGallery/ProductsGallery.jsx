@@ -8,12 +8,13 @@ import {
   ProductCheckbox,
 } from "./ProductsGallery.style";
 
-const ProductsGallery = () => {
+const ProductsGallery = ({ products }) => {
   return (
     <ProductsGrid container spacing={8}>
-      {[1, 2, 3, 4, 5, 6, 7].map((k) => (
-        <ProductsGrid key={k}>
-          <Product product={k} />
+      {products.map((product) => (
+        // <ProductsGrid key={product.id}> {/* For proper flex flow */}
+        <ProductsGrid item key={product.id} xs={12} sm={6} lg={4}>
+          <Product product={product} />
         </ProductsGrid>
       ))}
     </ProductsGrid>
@@ -29,8 +30,8 @@ const Product = ({ product }) => {
 
   return (
     <ProductCard onClick={() => handleCardClick()}>
-      <ProductImage src="https://picsum.photos/600/400" />
-      <ProductTitle>Product Name: Product Price</ProductTitle>
+      <ProductImage src={product.images[0]} />
+      <ProductTitle>{`${product.title}: $${product.price}`}</ProductTitle>
       <ProductCheckbox checked={checked} />
     </ProductCard>
   );
