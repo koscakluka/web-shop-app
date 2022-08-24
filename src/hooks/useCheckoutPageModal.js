@@ -1,13 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  CheckoutFormP1,
-  CheckoutFormP1Actions,
-  CheckoutFormP2,
-  CheckoutFormP2Actions,
+  CheckoutForm,
+  CheckoutFormActions,
+} from "../components/CheckoutForm/CheckoutForm";
+
+import {
   CheckoutFormP3,
   CheckoutFormP3Actions,
-} from "../components/CheckoutForm/CheckoutForm";
+} from "../components/CheckoutForm/CheckoutFormP3";
 
 const useCheckoutPageModal = (getCart) => {
   const [checkoutPage, setCheckoutPage] = React.useState(1);
@@ -39,8 +40,8 @@ const useCheckoutPageModal = (getCart) => {
     switch (page) {
       case 2:
         return [
-          <CheckoutFormP2 />,
-          <CheckoutFormP2Actions
+          <CheckoutForm formFields={PAGE2_FIELDS} page={2} />,
+          <CheckoutFormActions
             nextPage={nextPage}
             previousPage={previousPage}
           />,
@@ -56,13 +57,92 @@ const useCheckoutPageModal = (getCart) => {
       case 1:
       default:
         return [
-          <CheckoutFormP1 />,
-          <CheckoutFormP1Actions nextPage={nextPage} />,
+          <CheckoutForm formFields={PAGE1_FIELDS} page={1} />,
+          <CheckoutFormActions nextPage={nextPage} />,
         ];
     }
   };
 
   return [open, handleClickOpen, handleClose, checkoutPage, getPage];
+};
+
+const PAGE1_FIELDS = {
+  "First Name": {
+    type: "text",
+    split: true,
+    required: true,
+  },
+  "Last Name": {
+    type: "text",
+    split: true,
+    required: true,
+  },
+  "Address Line 1": {
+    type: "text",
+    split: false,
+    required: true,
+  },
+  "Address Line 2": {
+    type: "text",
+    split: false,
+    required: false,
+  },
+  City: {
+    type: "text",
+    split: true,
+    required: true,
+  },
+  "State/Province/Region": {
+    type: "text",
+    split: true,
+  },
+  "Zip / Postal code": {
+    type: "number",
+    split: true,
+    required: true,
+  },
+  Country: {
+    type: "number",
+    split: true,
+    required: true,
+  },
+  "Use this address for payment details": {
+    type: "checkbox",
+    split: false,
+    required: false,
+    checked: true,
+  },
+};
+
+const PAGE2_FIELDS = {
+  "Name on card": {
+    type: "text",
+    split: true,
+    required: true,
+  },
+  "Card number": {
+    type: "text",
+    split: true,
+    required: true,
+  },
+  "Expiry date": {
+    type: "text",
+    split: true,
+    required: true,
+  },
+  CVV: {
+    type: "text",
+    split: true,
+    required: true,
+    help: "Last three digits on signature strip",
+  },
+
+  "Remember credit card details for next time": {
+    type: "checkbox",
+    split: false,
+    required: false,
+    checked: false,
+  },
 };
 
 export default useCheckoutPageModal;
