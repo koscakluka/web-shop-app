@@ -14,23 +14,19 @@ const useCart = () => {
     });
   };
 
-  const toggleProductInCart = (productId) => {
-    if (cart.has(productId)) {
+  const cartOperations = {};
+  cartOperations.get = () => Array.from(cart);
+  cartOperations.has = (productId) => cart.has(productId);
+  cartOperations.size = () => cart.size;
+  cartOperations.toggle = (productId) => {
+    if (cartOperations.has(productId)) {
       removeProductFromCart(productId);
     } else {
       addProductToCart(productId);
     }
   };
 
-  const getCartArray = () => {
-    return Array.from(cart);
-  };
-
-  const isInCart = (productId) => {
-    return cart.has(productId);
-  };
-
-  return [cart, getCartArray, toggleProductInCart, isInCart];
+  return [cartOperations];
 };
 
 export default useCart;

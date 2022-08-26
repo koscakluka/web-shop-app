@@ -23,12 +23,12 @@ const HomePage = () => {
     ["products", "all"],
     () => ProductsService.getAllProducts()
   );
-  const [cart, getCartArray, toggleProductInCart] = useCart();
+  const [cart] = useCart();
   const [open, handleClickOpen, handleClose, checkoutPage, getPage] =
-    useCheckoutPageModal(getCartArray);
+    useCheckoutPageModal(cart.get);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const selectedProducts = React.useMemo(() => getCartArray(), [cart]);
+  const selectedProducts = React.useMemo(() => cart.get(), [cart]);
 
   const [checkoutContent, checkoutActions] = React.useMemo(
     () => getPage(checkoutPage),
@@ -49,15 +49,19 @@ const HomePage = () => {
       ) : products.length > 0 ? (
         <ProductsGallery
           products={products}
-          selectHandler={toggleProductInCart}
+          selectHandler={cart.toggle}
           selectedProducts={selectedProducts}
         />
       ) : (
         <Typography textAlign={"center"}>No products found...</Typography>
       )}
-      <BuyButton variant="contained" size="large" onClick={handleClickOpen}>
-        Buy
-      </BuyButton>
+      {cart.size() > 0 ? (
+        <BuyButton variant="contained" size="large" onClick={handleClickOpen}>
+          Buy
+        </BuyButton>
+      ) : (
+        <></>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
