@@ -1,25 +1,17 @@
 import React from "react";
 
 const useCart = () => {
-  const [cart, dispatch] = React.useReducer((state, action) => {
-    switch (action.type) {
-      case "add":
-        state.add(action.productId);
-        break;
-      case "remove":
-        state.delete(action.productId);
-        break;
-      default:
-    }
-    return state;
-  }, new Set());
+  const [cart, setCart] = React.useState(new Set());
 
   const addProductToCart = (productId) => {
-    dispatch({ type: "add", productId });
+    setCart((cart) => new Set(cart.add(productId)));
   };
 
   const removeProductFromCart = (productId) => {
-    dispatch({ type: "remove", productId });
+    setCart((cart) => {
+      cart.delete(productId);
+      return new Set(cart);
+    });
   };
 
   const toggleProductInCart = (productId) => {
@@ -30,7 +22,7 @@ const useCart = () => {
     }
   };
 
-  const getCart = () => {
+  const getCartArray = () => {
     return Array.from(cart);
   };
 
@@ -38,7 +30,7 @@ const useCart = () => {
     return cart.has(productId);
   };
 
-  return [getCart, toggleProductInCart, isInCart];
+  return [cart, getCartArray, toggleProductInCart, isInCart];
 };
 
 export default useCart;

@@ -1,5 +1,4 @@
 import React from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import {
   CheckoutForm,
@@ -10,7 +9,6 @@ import {
   CheckoutFormReview,
   CheckoutFormReviewActions,
 } from "../components/CheckoutForm/CheckoutFormReview";
-import ProductsService from "../services/products/ProductsService";
 
 const useCheckoutPageModal = (getCart) => {
   //TODO Validation
