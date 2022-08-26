@@ -9,6 +9,7 @@ import {
 } from "./CheckoutForm.style";
 import { useQueries } from "react-query";
 import ProductsService from "../../services/products/ProductsService";
+import CircularLoading from "../Loading/CircularLoading";
 
 const CheckoutFormReview = ({ cart, formValues }) => {
   const userQueries = useQueries(
@@ -20,29 +21,27 @@ const CheckoutFormReview = ({ cart, formValues }) => {
     })
   );
 
-  const cartProducts = [];
-  userQueries.forEach((query) => {
-    if (!query.isLoading && query.data) {
-      cartProducts.push(query.data);
-    }
-  });
-
   const shippingInfo = {
     name: `${formValues["First Name"]} ${formValues["Last Name"]}`,
-    address: [
-      formValues["Address Line 1"],
-      formValues["Address Line 2"],
-      formValues["City"],
-      formValues["State/Province/Region"],
-      formValues["Zip / Postal code"],
-      formValues["Country"],
-    ].join(", "), //REMOVE NON-EMPTY STRINGS!
+    address: `${formValues["Address Line 1"]}, ${
+      formValues["Address Line 2"] ? `${formValues["Address Line 2"]}, ` : ""
+    }${formValues["City"]}, \
+    ${
+      formValues["State/Province/Region"]
+        ? `${formValues["State/Province/Region"]}, `
+        : ""
+    }${formValues["Zip / Postal code"]}, \
+    ${formValues["Country"]}`,
   };
 
+  const cartProducts = [];
   let totalSum = 0;
-  cartProducts.forEach((product) => {
-    totalSum += product.price;
-  });
+  const isCartLoading = userQueries.some(({ isLoading }) => isLoading);
+
+  if (!isCartLoading) {
+    userQueries.forEach(({ data }) => cartProducts.push(data));
+    cartProducts.forEach(({ price }) => (totalSum += price));
+  }
 
   return (
     <>
@@ -52,21 +51,25 @@ const CheckoutFormReview = ({ cart, formValues }) => {
           <HeaderTypography variant={"h6"} component={"h2"}>
             Order Summary
           </HeaderTypography>
-          {cartProducts.map((product) => (
-            <Grid container mb={"1rem"} key={product.id}>
-              <Grid item xs={12} sm>
-                <Typography>{product.title}</Typography>
+          {!isCartLoading ? (
+            cartProducts.map((product) => (
+              <Grid container mb={"1rem"} key={product.id}>
+                <Grid item xs={12} sm>
+                  <Typography>{product.title}</Typography>
+                </Grid>
+                <Grid item xs={12} sm={"auto"}>
+                  <Typography>${product.price}.00</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <DescriptionTypography>
+                    {product.description}
+                  </DescriptionTypography>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={"auto"}>
-                <Typography>${product.price}.00</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <DescriptionTypography>
-                  {product.description}
-                </DescriptionTypography>
-              </Grid>
-            </Grid>
-          ))}
+            ))
+          ) : (
+            <CircularLoading />
+          )}
           <Grid container mb={"1.5rem"}>
             <Grid item xs={12} sm>
               <Typography>Shipping</Typography>
@@ -80,7 +83,11 @@ const CheckoutFormReview = ({ cart, formValues }) => {
               <Typography>Total</Typography>
             </Grid>
             <Grid item xs={12} sm={"auto"}>
-              <Typography fontWeight={"bold"}>${totalSum}.00</Typography>
+              {!isCartLoading ? (
+                <Typography fontWeight={"bold"}>${totalSum}.00</Typography>
+              ) : (
+                <CircularLoading />
+              )}
             </Grid>
           </Grid>
         </Grid>

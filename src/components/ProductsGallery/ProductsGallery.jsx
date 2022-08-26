@@ -36,7 +36,7 @@ const Product = ({ product, selectHandler, selected }) => {
     <ProductCard onClick={handleCardClick}>
       <ProductImage src={product.images[0]} />
       <ProductTitle>{`${product.title}: $${product.price}`}</ProductTitle>
-      <ProductCheckbox onClick={handleCardClick} checked={selected || false} />
+      <ProductCheckbox checked={selected || false} />
     </ProductCard>
   );
 };

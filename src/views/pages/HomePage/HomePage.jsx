@@ -69,7 +69,12 @@ const HomePage = () => {
         fullWidth={true}
       >
         <DialogTitle>
-          <Typography variant={"h4"} align={"center"} gutterBottom>
+          <Typography
+            variant={"h4"}
+            component={"div"}
+            align={"center"}
+            gutterBottom
+          >
             Checkout
           </Typography>
         </DialogTitle>
