@@ -16,16 +16,32 @@ import {
 import ProductsService from "../../../services/products/ProductsService";
 import { useQuery } from "react-query";
 import CircularLoading from "../../../components/Loading/CircularLoading";
+import useCart from "../../../hooks/useCart";
+import { CHECKOUT_FORM_FIELDS } from "./HomePage.constants";
 
 const HomePage = () => {
   const { data: products, isLoading: isLoadingProducts } = useQuery(
     ["products", "all"],
     () => ProductsService.getAllProducts()
   );
-  const [open, handleClickOpen, handleClose, checkoutPage, getPage] =
-    useCheckoutPageModal();
+  const [cart] = useCart();
+  const [
+    open,
+    handleClickOpen,
+    handleClose,
+    checkoutPage,
+    getPage,
+    errorMessages,
+  ] = useCheckoutPageModal(cart.get, CHECKOUT_FORM_FIELDS);
 
-  const [checkoutContent, checkoutActions] = getPage(checkoutPage);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const selectedProducts = React.useMemo(() => cart.get(), [cart]);
+
+  const [checkoutContent, checkoutActions] = React.useMemo(
+    () => getPage(checkoutPage),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [checkoutPage, open, errorMessages]
+  );
 
   return (
     <StandardLayout>
@@ -38,13 +54,21 @@ const HomePage = () => {
       {isLoadingProducts ? (
         <CircularLoading />
       ) : products.length > 0 ? (
-        <ProductsGallery products={products} />
+        <ProductsGallery
+          products={products}
+          selectHandler={cart.toggle}
+          selectedProducts={selectedProducts}
+        />
       ) : (
         <Typography textAlign={"center"}>No products found...</Typography>
       )}
-      <BuyButton variant="contained" size="large" onClick={handleClickOpen}>
-        Buy
-      </BuyButton>
+      {cart.size() > 0 ? (
+        <BuyButton variant="contained" size="large" onClick={handleClickOpen}>
+          Buy
+        </BuyButton>
+      ) : (
+        <></>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -52,7 +76,12 @@ const HomePage = () => {
         fullWidth={true}
       >
         <DialogTitle>
-          <Typography variant={"h4"} align={"center"} gutterBottom>
+          <Typography
+            variant={"h4"}
+            component={"div"}
+            align={"center"}
+            gutterBottom
+          >
             Checkout
           </Typography>
         </DialogTitle>

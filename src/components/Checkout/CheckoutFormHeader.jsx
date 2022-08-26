@@ -8,7 +8,7 @@ const CheckoutFormHeader = ({ page }) => (
   <SmBox mb={"2.5rem"}>
     <Grid container alignItems={"center"} justifyContent={"space-between"}>
       {PAGES.map((title, index) => (
-        <>
+        <React.Fragment key={title}>
           <Grid item>
             <CheckoutFormHeaderElement
               index={index + 1}
@@ -23,7 +23,7 @@ const CheckoutFormHeader = ({ page }) => (
           ) : (
             <></>
           )}
-        </>
+        </React.Fragment>
       ))}
     </Grid>
   </SmBox>
