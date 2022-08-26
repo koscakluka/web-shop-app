@@ -6,7 +6,7 @@ import {
   DescriptionTypography,
   HeaderTypography,
   SubheaderTypography,
-} from "./CheckoutForm.style";
+} from "./Checkout.style";
 import { useQueries } from "react-query";
 import ProductsService from "../../services/products/ProductsService";
 import CircularLoading from "../Loading/CircularLoading";
@@ -23,14 +23,16 @@ const CheckoutFormReview = ({ cart, formValues }) => {
 
   const shippingInfo = {
     name: `${formValues["First Name"]} ${formValues["Last Name"]}`,
-    address: `${formValues["Address Line 1"]}, ${
-      formValues["Address Line 2"] ? `${formValues["Address Line 2"]}, ` : ""
-    }${formValues["City"]}, \
+    address: `\
+    ${formValues["Address Line 1"]}, \
+    ${formValues["Address Line 2"] ? `${formValues["Address Line 2"]}, ` : ""} \
+    ${formValues["City"]}, \
     ${
       formValues["State/Province/Region"]
         ? `${formValues["State/Province/Region"]}, `
         : ""
-    }${formValues["Zip / Postal code"]}, \
+    } \
+    ${formValues["Zip / Postal code"]}, \
     ${formValues["Country"]}`,
   };
 

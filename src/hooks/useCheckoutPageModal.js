@@ -1,21 +1,24 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckoutFormActions } from "../components/CheckoutForm/CheckoutForm";
+import { CheckoutFormActions } from "../components/Checkout/CheckoutForm";
 
 import {
   CheckoutFormReview,
   CheckoutFormReviewActions,
-} from "../components/CheckoutForm/CheckoutFormReview";
+} from "../components/Checkout/CheckoutFormReview";
 import useMultiPageForm from "./useMultiPageForm";
 
-const useCheckoutPageModal = (getCart) => {
+const useCheckoutPageModal = (getCart, formFields) => {
   const [checkoutPage, setCheckoutPage] = React.useState(1);
   const [open, setOpen] = React.useState(false);
+  const [errorMessages, setErrorMessages] = React.useState(null);
 
   const navigate = useNavigate();
-  const [formValues, updateFormValues, getFormPage] = useMultiPageForm();
+  const [formValues, updateFormValues, getFormPage] =
+    useMultiPageForm(formFields);
 
   const submitForm = () => {
+    //TODO Actually submit the form
     navigate("/thank-you");
   };
 
@@ -39,27 +42,31 @@ const useCheckoutPageModal = (getCart) => {
   };
 
   const nextPage = () => {
-    setCheckoutPage((page) => (page < 3 ? page + 1 : page));
+    setCheckoutPage((page) => (page < formFields.length + 1 ? page + 1 : page));
   };
 
   const getPage = (page) => {
-    const form = getFormPage(page);
+    const [form, formValidator] = getFormPage(page);
     if (form) {
+      const validateAndNextPage = () => {
+        const [isValid, errors] = updateFormValues(formValidator);
+        setErrorMessages(errors);
+        if (isValid) {
+          nextPage();
+        }
+      };
+      const updateAndPreviousPage =
+        page > 1
+          ? () => {
+              updateFormValues();
+              previousPage();
+            }
+          : undefined;
       return [
         form,
         <CheckoutFormActions
-          nextPage={() => {
-            updateFormValues();
-            nextPage();
-          }}
-          previousPage={
-            page > 1
-              ? () => {
-                  updateFormValues();
-                  previousPage();
-                }
-              : undefined
-          }
+          nextPage={validateAndNextPage}
+          previousPage={updateAndPreviousPage}
         />,
       ];
     } else {
@@ -73,7 +80,14 @@ const useCheckoutPageModal = (getCart) => {
     }
   };
 
-  return [open, handleClickOpen, handleClose, checkoutPage, getPage];
+  return [
+    open,
+    handleClickOpen,
+    handleClose,
+    checkoutPage,
+    getPage,
+    errorMessages,
+  ];
 };
 
 export default useCheckoutPageModal;

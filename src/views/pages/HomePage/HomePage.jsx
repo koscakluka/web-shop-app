@@ -17,6 +17,7 @@ import ProductsService from "../../../services/products/ProductsService";
 import { useQuery } from "react-query";
 import CircularLoading from "../../../components/Loading/CircularLoading";
 import useCart from "../../../hooks/useCart";
+import { CHECKOUT_FORM_FIELDS } from "./HomePage.constants";
 
 const HomePage = () => {
   const { data: products, isLoading: isLoadingProducts } = useQuery(
@@ -24,8 +25,14 @@ const HomePage = () => {
     () => ProductsService.getAllProducts()
   );
   const [cart] = useCart();
-  const [open, handleClickOpen, handleClose, checkoutPage, getPage] =
-    useCheckoutPageModal(cart.get);
+  const [
+    open,
+    handleClickOpen,
+    handleClose,
+    checkoutPage,
+    getPage,
+    errorMessages,
+  ] = useCheckoutPageModal(cart.get, CHECKOUT_FORM_FIELDS);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectedProducts = React.useMemo(() => cart.get(), [cart]);
@@ -33,7 +40,7 @@ const HomePage = () => {
   const [checkoutContent, checkoutActions] = React.useMemo(
     () => getPage(checkoutPage),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [checkoutPage, open]
+    [checkoutPage, open, errorMessages]
   );
 
   return (

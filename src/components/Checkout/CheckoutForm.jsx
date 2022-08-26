@@ -8,11 +8,12 @@ import {
   Grid,
 } from "@mui/material";
 import CheckoutFormHeader from "./CheckoutFormHeader";
-import { HeaderTypography } from "./CheckoutForm.style";
+import { HeaderTypography } from "./Checkout.style";
 
 const CheckoutForm = ({
   formFields,
   formValues,
+  formErrors,
   page,
   elementsRegistration,
 }) => (
@@ -33,6 +34,14 @@ const CheckoutForm = ({
                 fullWidth
                 required={value.required}
                 defaultValue={formValues[key]}
+                error={formErrors[key] !== undefined}
+                helperText={
+                  formErrors[key] !== undefined
+                    ? formErrors[key]
+                    : formFields.help
+                    ? formFields.help
+                    : ""
+                }
                 inputRef={(el) => {
                   elementsRegistration(key, el);
                 }}
