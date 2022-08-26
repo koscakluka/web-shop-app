@@ -37,7 +37,7 @@ const HomePage = () => {
 
   const [checkoutContent, checkoutActions] = React.useMemo(
     () => getPage(checkoutPage),
-    [checkoutPage]
+    [checkoutPage, open]
   );
 
   return (

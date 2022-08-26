@@ -1,4 +1,5 @@
 import React from "react";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import {
   CheckoutForm,
@@ -9,8 +10,10 @@ import {
   CheckoutFormReview,
   CheckoutFormReviewActions,
 } from "../components/CheckoutForm/CheckoutFormReview";
+import ProductsService from "../services/products/ProductsService";
 
 const useCheckoutPageModal = (getCart) => {
+  //TODO Validation
   const [checkoutPage, setCheckoutPage] = React.useState(1);
   const [formValues, setFormValues] = React.useState({});
   const [open, setOpen] = React.useState(false);
@@ -43,6 +46,7 @@ const useCheckoutPageModal = (getCart) => {
   };
 
   const handleClose = () => {
+    updateFormValues();
     setOpen(false);
   };
 
@@ -77,7 +81,7 @@ const useCheckoutPageModal = (getCart) => {
         ];
       case 3:
         return [
-          <CheckoutFormReview formValues={formValues} />,
+          <CheckoutFormReview cart={getCart()} formValues={formValues} />,
           <CheckoutFormReviewActions
             submitForm={submitForm}
             previousPage={previousPage}

@@ -3,19 +3,18 @@ import axios from "axios";
 const client = (() =>
   axios.create({ baseURL: "https://dummyjson.com/products" }))();
 
-const productsRequest = async (options) => {
-  const onSuccess = (response) => {
-    const {
-      data: { products },
-    } = response;
-    return products;
+const productsRequest = async (options, onSuccess = null, onError = null) => {
+  const onSuccessDefault = (response) => {
+    return response.data;
   };
 
-  const onError = (error) => {
+  const onErrorDefault = (error) => {
     return Promise.reject(error.response);
   };
 
-  return client(options).then(onSuccess).catch(onError);
+  return client(options)
+    .then(onSuccess ? onSuccess : onSuccessDefault)
+    .catch(onError ? onError : onErrorDefault);
 };
 
 export default productsRequest;
