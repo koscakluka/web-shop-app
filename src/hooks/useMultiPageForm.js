@@ -36,7 +36,7 @@ const useMultiPageForm = (formFields) => {
         setFormErrors(errorMessages);
         return [false, errorMessages];
       }
-      setFormErrors();
+      setFormErrors({});
     }
 
     return [true, {}];
